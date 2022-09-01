@@ -4,11 +4,17 @@ AVA-seq main pipeline. Set main parameters.
 ##############################################
 # INPUT FILES
 
+# organization of files, replicates, libraries, etc
+organization_file = ""
+
 # path to fastq.gz files location
 fastaq_files_location = "../../hpPRS/TestFastq/"
 
 # path to edgeR script
 edgeR_script = "scriptToRunR.R"
+
+# path to diamond database
+diamond_database = "nr.dmnd"
 
 # positive controls file path
 # every protein pair should be written in new line
@@ -40,6 +46,13 @@ results_directory_location = "../../hpPRS/Results/"
 logFC_cutoff = 5
 FDR_cutoff = 0.05
 ##############################################
+# AVASEQ DESIGN DETAILS
+
+ava_lambda  = "ACGTTTGGC" # original "CACAAGGG"
+ava_rnap = "GAGGCGGCC"    # original with added T for fragments:  TCGTTTTGG
+distance_to_fragment_start = 36
+length_of_read_used = 75
+##############################################
 # .FASTQ.GZ FILES NAME FORMATING
 
 # Assumes fastq.gz files are in the following format:
@@ -54,7 +67,7 @@ FDR_cutoff = 0.05
 ##############################################
 # DIAMOND 
 
+# To create diamond nr.dmnd reference database for alignment
 # Run in the main pipeline folder: "diamond makedb --in seqeunces_protein.faa -d nr"
 # sequences_protein.faa is a protein database file in FASTA format
-# This command creates nr.dmnd reference database for alignment
 ##############################################

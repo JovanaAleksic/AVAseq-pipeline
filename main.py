@@ -68,15 +68,15 @@ def main(fastaq_files_location):
 		fasta_R1 = fastqToFasta_p(file_R1)
 		fasta_R2 = fastqToFasta_p(file_R2)
 
-		pep_R1 = fastaToPep(fasta_R1)
-		pep_R2 = fastaToPep(fasta_R2)
+		pep_R1 = fastaToPep(fasta_R1, ava_lambda, ava_rnap, distance_to_fragment_start, length_of_read_used)
+		pep_R2 = fastaToPep(fasta_R2, ava_lambda, ava_rnap, distance_to_fragment_start, length_of_read_used)
 
 		pep_join = pepToJoin_p(pep_R1, pep_R2)
 		pep_diff = pepJoinToDifflambdaFirst_p(pep_join)
 		join_diff_forr, join_diff_rev = pepJoinDiffToFasta_p(pep_diff)
 
-		join_diff_forr_bp = forRevToBlastDIAM(join_diff_forr)
-		join_diff_rev_bp = forRevToBlastDIAM(join_diff_rev)
+		join_diff_forr_bp = forRevToBlastDIAM(join_diff_forr, diamond_database)
+		join_diff_rev_bp = forRevToBlastDIAM(join_diff_rev, diamond_database)
 
 		joinbp = bpToJoin_p(join_diff_forr_bp, join_diff_rev_bp)
 
@@ -137,7 +137,7 @@ def main(fastaq_files_location):
 
 
 if __name__=="__main__":
-	# creation_of_output_directories(results_directory_location, intermediate_files_location, counts_files_location)
+	creation_of_output_directories(results_directory_location, intermediate_files_location, counts_files_location)
 	main(fastaq_files_location)
 
 

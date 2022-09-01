@@ -48,11 +48,10 @@ def fastqToFasta_p(file):
 ##############################################################################################################
 # input .fasta file --> output .pep file
 # Take fasta files of AVAseq and return proteins
-def fastaToPep(file):
+def fastaToPep(file, ava_lambda, ava_rnap, distance_to_fragment_start, length_of_read_used):
 	output_file_name = file.replace(".fasta", ".pep")
 	output_file = open(output_file_name, "w")
-	ava_lambda = "ACGTTTGGC"   # original "CACAAGGG"
-	ava_rnap = "GAGGCGGCC"     # original with added T for fragments:  TCGTTTTGG
+
 	codon2aa = {'TCA':'S','TCC':'S','TCG':'S','TCT':'S','TTC':'F','TTT':'F','TTA':'L',
 				'TTG':'L','TAC':'Y','TAT':'Y','TAA':'*','TAG':'*','TGC':'C','TGT':'C',
 				'TGA':'*','TGG':'W','CTA':'L','CTC':'L','CTG':'L','CTT':'L','CCA':'P',
@@ -64,13 +63,14 @@ def fastaToPep(file):
 				'GAC':'D','GAT':'D','GAA':'E','GAG':'E','GGA':'G','GGC':'G','GGG':'G',
 				'GGT':'G'}
 
+
 	for line in open(file, "r").readlines():
 		line = line.replace("\n", "")
 		if line[0]==">":
 			output_file.write(line.split(" ")[0] + "\t")
 		else:
-			locLam = line.rfind(ava_lambda) + 36   # rfind returns -1 if not found in the sequence
-			locRnap = line.rfind(ava_rnap) + 36
+			locLam = line.rfind(ava_lambda) + distance_to_fragment_start   # rfind returns -1 if not found in the sequence
+			locRnap = line.rfind(ava_rnap) + distance_to_fragment_start
 			if locLam > locRnap:
 				start = locLam
 				note = "lambda"
@@ -80,7 +80,7 @@ def fastaToPep(file):
 			else:
 				start = 0
 				note = "neither"
-			coding = line[start:(start+75)]
+			coding = line[start:(start+length_of_read_used)]
 			DNA = coding
 			protein = ''
 			for i in range(0, len(DNA)-2, 3):
@@ -174,9 +174,9 @@ def pepJoinDiffToFasta_p(file):
 ##############################################################################################################
 # .for or .rev files inputs
 # nr.dmnd is a database --> created with diamond 
-def forRevToBlastDIAM(file):
+def forRevToBlastDIAM(file, diamond_database):
 	out = f"{file}" + ".bp"
-	cmd = f"diamond blastp --db nr.dmnd --outfmt 6 -q {file} --matrix PAM30 --more-sensitive --masking 0 --max-target-seqs 1 | awk '$3>80&&$7==1' > {out}"
+	cmd = f"diamond blastp --db {diamond_database} --outfmt 6 -q {file} --matrix PAM30 --more-sensitive --masking 0 --max-target-seqs 1 | awk '$3>80&&$7==1' > {out}"
 	s = subprocess.run(cmd, capture_output=True, shell=True, text=True)
 	if s.returncode==0:
 		print("Diamond alignment DONE")
@@ -366,7 +366,7 @@ def removalFS(diff_files_location, fs_location, logFC_cutoff, FDR_cutoff, output
 	frame_shift = open(fs_location, "r")
 	frame_shift_names = [x.replace("\n","") for x in frame_shift.readlines()]
 
-	list_of_problematic_proteins = []
+	list_of_problematic_fragments = []
 
 	for diff_file in glob.iglob(diff_files_location + "diff.txt"):
 		df = pd.read_csv(diff_file, sep="\t")
@@ -387,9 +387,9 @@ def removalFS(diff_files_location, fs_location, logFC_cutoff, FDR_cutoff, output
 			gene2 = df.loc[i, 'frag2']
 
 			if fragment1 not in frame_shift_names:
-				list_of_problematic_proteins.append(gene1)
+				list_of_problematic_fragments.append(fragment1)
 			elif fragment2 not in frame_shift_names:
-				list_of_problematic_proteins.append(gene2)
+				list_of_problematic_fragments.append(fragment2)
 
 
 	for diff_file in glob.iglob(diff_files_location + "*diff.txt"):
@@ -399,7 +399,7 @@ def removalFS(diff_files_location, fs_location, logFC_cutoff, FDR_cutoff, output
 		df['frag1'] = broken_df[0] + ':' + broken_df[1]
 		df['gene2'] = broken_df[2]
 		df['frag2'] = broken_df[2] + ':' + broken_df[3]
-		df = df[~(df['gene1'].isin(list_of_problematic_proteins) | df['gene2'].isin(list_of_problematic_proteins))]
+		df = df[~(df['frag1'].isin(list_of_problematic_fragments) | df['frag2'].isin(list_of_problematic_fragments))]
 		df.drop(['gene1', 'gene2', 'frag1', 'frag2'], inplace=True, axis=1)
 		df.to_csv(output_directory + os.path.basename(diff_file)[:-4] + "withFSremoval.txt", sep = "\t", index=False)
 
