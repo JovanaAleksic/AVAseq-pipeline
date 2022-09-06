@@ -58,9 +58,9 @@ length_of_read_used = 75
 # STAGES
 
 # Do you want fastq.gz --> counts files. Set True for 'Yes', False for 'No'
-flag1 = True
+flag1 = False
 # Do you want counts --> diff files. Set True for 'Yes', False for 'No'
-flag2 = True
+flag2 = False
 # Do you want diff --> controls and frame shift removal. Set True for 'Yes', False for 'No'
 flag3 = True
 # Do you want final PPI table. Set True for 'Yes', False for 'No'
