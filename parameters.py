@@ -6,7 +6,7 @@ AVA-seq main pipeline. Set main parameters.
 
 # organization of files, replicates, libraries, etc 
 # IMPORTANT: project name and lbrary name should not contain underscore "_"
-organization_file = "organization1.txt"
+organization_file = "organization.txt"
 
 # path to fastq.gz files location
 fastaq_files_location = "../hpPRS/TestFastq/"
@@ -14,8 +14,8 @@ fastaq_files_location = "../hpPRS/TestFastq/"
 # path to edgeR script
 edgeR_script = "scriptToRunR.R"
 
-# path to diamond database
-diamond_database = "nr.dmnd"
+# fragment sequences file
+fragment_sequences = "../hpPRS/hpyloriPRS_ge2occUnqHPnumsADDureIUPAC.40aa.frags.txt"
 
 # positive controls file path
 # every protein pair should be written in new line
