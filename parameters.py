@@ -73,9 +73,3 @@ flag4 = True
 # Combination of flag1, flag3 and/or flag4 - do not set this! 
 # The computations depending on flag3 and flag4 will ignore new counts files.
 ##############################################
-# DIAMOND 
-
-# To create diamond nr.dmnd reference database for alignment
-# Run in the main pipeline folder: "diamond makedb --in seqeunces_protein.faa -d nr"
-# sequences_protein.faa is a protein database file in FASTA format
-##############################################
