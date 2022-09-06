@@ -169,21 +169,6 @@ def pepJoinDiffToFasta_p(file):
 	print("Diff.pep --> .for and .rev DONE")
 	return forr_name, rev_name
 
-
-
-##############################################################################################################
-# .for or .rev files inputs
-# nr.dmnd is a database --> created with diamond 
-def forRevToBlastDIAM(file, diamond_database):
-	out = f"{file}" + ".bp"
-	cmd = f"diamond blastp --db {diamond_database} --outfmt 6 -q {file} --matrix PAM30 --more-sensitive --masking 0 --max-target-seqs 1 | awk '$3>80&&$7==1' > {out}"
-	s = subprocess.run(cmd, capture_output=True, shell=True, text=True)
-	if s.returncode==0:
-		print("Diamond alignment DONE")
-	return out
-
-
-
 ##############################################################################################################
 
 def bpToJoin(file_forbp, file_revbp):
