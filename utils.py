@@ -14,13 +14,15 @@ def fastqToFasta(file):
 		subprocess.run(f"gunzip -c {file} > {unziped_file}", shell=True, capture_output=True) 
 	elif re.search(".fastq$",file):
 		unziped_file = file
+	else:
+		print("Files not in the right format!")
 		
 	out = file.replace('.fastq','.fasta') # file to store .fasta, replace .fastq extension with .fasta
 	# There are other options like sed
 	s = subprocess.run(f"perl -ne 'y/@/>/;print($_.<>)&&<>&&<>' {unziped_file} > {out}", capture_output=True, text=True, shell=True)
 	if s.returncode == 0:
 		print(".fastq --> .fasta DONE")
-	return out
+	return out 
 
 
 
@@ -29,18 +31,21 @@ def fastqToFasta_p(file):
 	if re.search(".gz$",file):   # matching .gz at the end of the file
 		unziped_file = file[:-3]   # unpacked .gz --> it has a name without .gz
 		subprocess.run(f"gunzip -c {file} > {unziped_file}", shell=True, capture_output=True)
-		output_file_name = unziped_file.replace('.fastq','.fasta')
-		output_file = open(output_file_name, "w")
-
-		for line in open(unziped_file, "r").readlines():
-			if line[0]=="@":
-				output_file.write(">" + line[1:])
-			elif line[0] in ['A', 'C', 'T', 'G']:
-				output_file.write(line)
-		print(".fastq --> .fasta DONE")
+	elif re.search(".fastq$",file):
+		unziped_file = file
 	else:
 		print("Files not in the right format!")
-		output_file_name = "" # breaks the code
+
+	output_file_name = unziped_file.replace('.fastq','.fasta')
+	output_file = open(output_file_name, "w")
+
+	for line in open(unziped_file, "r").readlines():
+		if line[0]=="@":
+			output_file.write(">" + line[1:])
+		elif line[0] in ['A', 'C', 'T', 'G']:
+			output_file.write(line)
+	print(".fastq --> .fasta DONE")
+
 	return output_file_name
 
 
