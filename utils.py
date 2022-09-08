@@ -11,15 +11,16 @@ import numpy as np
 def fastqToFasta(file):
 	if re.search(".gz$",file):   # matching .gz at the end of the file
 		unziped_file = file[:-3]   # unpacked .gz 
-		subprocess.run(f"gunzip -c {file} > {unziped_file}", shell=True, capture_output=True)
-		out = unziped_file.replace('.fastq','.fasta')  # file to store .fasta, replace .fastq extension with .fasta
-		# There are other options like sed
-		s = subprocess.run(f"perl -ne 'y/@/>/;print($_.<>)&&<>&&<>' {unziped_file} > {out}", capture_output=True, text=True, shell=True)
-		if s.returncode == 0:
-			print(".fastq --> .fasta DONE")
-	else:
-		print("Files not in the right format!")
-	return out 
+		subprocess.run(f"gunzip -c {file} > {unziped_file}", shell=True, capture_output=True) 
+	elif re.search(".fastq$",file):
+		unziped_file = file
+		
+	out = file.replace('.fastq','.fasta') # file to store .fasta, replace .fastq extension with .fasta
+	# There are other options like sed
+	s = subprocess.run(f"perl -ne 'y/@/>/;print($_.<>)&&<>&&<>' {unziped_file} > {out}", capture_output=True, text=True, shell=True)
+	if s.returncode == 0:
+		print(".fastq --> .fasta DONE")
+	return out
 
 
 
