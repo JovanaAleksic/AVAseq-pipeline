@@ -273,7 +273,7 @@ def merge_counts(organization_df, counts_files_location):
 				else:
 					i = i[0]
 
-				filepath = counts_files_location + str(organization_df.loc[i, "R1"]).replace("R1", "R1R2").split(".")[0] + "JoinDiff.joinbp.count" # -8 to remove fastq.gz from the name
+				filepath = counts_files_location + str(organization_df.loc[i, "R1"]).replace("R1", "R1R2").split(".")[0] + "JoinDiff.joinbp.count" 
 				df = pd.read_csv(filepath, sep="\t", names=['FragPair', os.path.basename(filepath)])
 
 				if replicate==1:
