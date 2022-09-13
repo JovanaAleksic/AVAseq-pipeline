@@ -106,7 +106,7 @@ def main(fastaq_files_location):
 
 		# moving all files except original .fastq.gz and .count to different folder
 		for file in glob.iglob(fastaq_files_location + "*"):
-			if file.endswith(".fastq.gz") or file.endswith(".count"):
+			if file.endswith(".fastq.gz") or file.endswith(".fastq") or file.endswith(".count"):
 				continue
 			else:
 				shutil.move(file, intermediate_files_location + os.path.basename(file))
