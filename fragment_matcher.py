@@ -1,5 +1,11 @@
 from parameters import *
-from Bio.Align import PairwiseAligner
+from Bio.Align import PairwiseAligner, MultipleSeqAlignment
+import time
+import random
+
+
+# execution time
+# start_time = time.time()
 
 
 
@@ -19,11 +25,18 @@ for line in open(fragment_sequences, "r").readlines():
 
 	fragSeq[seq] = key
 
-list_of_sequences = fragSeq.keys()
+list_of_sequences = list(fragSeq.keys())
+print(len(list_of_sequences))
 
 
-# test it
-for seqq in list_of_sequences:
+# test and time
+counter = 0
+start_time = time.time()
+
+
+for i in range(1000000):
+
+	seqq = random.choice(list_of_sequences)
 	query = "ABCF" + seqq[4:50] + "GXHJS" + seqq[55:75]
 	real_fragment = fragSeq[seqq]
 
@@ -38,11 +51,11 @@ for seqq in list_of_sequences:
 			score = temp_score
 			matched_fragment = fragSeq[seq]
 
-	print(real_fragment)
-	print(matched_fragment)
-	print(score)
+	if real_fragment==matched_fragment:
+		counter+=1
 
 
 
 
-
+print(f"It takes {time.time() - start_time} secs")
+print(f"We got {counter} correct")
