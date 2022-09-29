@@ -39,10 +39,10 @@ def fastqToFasta_p(file):
 	output_file_name = unziped_file.replace('.fastq','.fasta')
 	output_file = open(output_file_name, "w")
 
-	for line in open(unziped_file, "r").readlines():
-		if line[0]=="@":
+	for i, line in enumerate(open(unziped_file, "r").readlines()):
+		if line[0]=="@" and (i % 4 == 0):
 			output_file.write(">" + line[1:])
-		elif line[0] in ['A', 'C', 'T', 'G']:
+		elif line[0] in ['A', 'C', 'T', 'G', 'N'] and (i % 4 == 1):
 			output_file.write(line)
 	print(".fastq --> .fasta DONE")
 
