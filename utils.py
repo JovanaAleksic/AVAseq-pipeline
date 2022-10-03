@@ -175,6 +175,8 @@ def pepJoinDiffToFasta_p(file):
 	print("Diff.pep --> .for and .rev DONE")
 	return forr_name, rev_name
 
+
+
 ##############################################################################################################
 # .for or .rev files inputs
 # nr.dmnd is a database --> created with diamond 
@@ -185,6 +187,7 @@ def forRevToBlastDIAM(file, diamond_database):
 	if s.returncode==0:
 		print("Diamond alignment DONE")
 	return out
+
 
 
 ##############################################################################################################
@@ -270,7 +273,7 @@ def merge_counts(organization_df, counts_files_location):
 				else:
 					i = i[0]
 
-				filepath = counts_files_location + str(organization_df.loc[i, "R1"]).replace("R1", "R1R2").split(".")[0] + "JoinDiff.joinbp.count" # -8 to remove fastq.gz from the name
+				filepath = counts_files_location + str(organization_df.loc[i, "R1"]).replace("R1", "R1R2").split(".")[0] + "JoinDiff.joinbp.count" 
 				df = pd.read_csv(filepath, sep="\t", names=['FragPair', os.path.basename(filepath)])
 
 				if replicate==1:
