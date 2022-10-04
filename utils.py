@@ -265,15 +265,15 @@ def merge_counts(organization_df, counts_files_location):
 
 	for project in list_of_projects:
 		for library in list_of_libraries:
-			for replicate in range(1, len(list_of_replicates)+1):
-
-				i = organization_df.index[organization_df['Replicate'] == replicate].tolist()
+			for replicate in range(1, len(list_of_replicates)+1): #check if every library has the same number of replicates
+				df = organization_df[(organization_df['Project']==project) & (organization_df['Library']==library) & (organization_df['Replicate']==replicate)]
+				i = df.index.tolist()
 				if len(i)>1:
-					print("There is error in the organization file, multiple files belond to the same replicate!")
+					print("There is error in the organization file, multiple files from one library belonging to the same replicate!")
 				else:
 					i = i[0]
 
-				filepath = counts_files_location + str(organization_df.loc[i, "R1"]).replace("R1", "R1R2").split(".")[0] + "JoinDiff.joinbp.count" 
+				filepath = counts_files_location + str(df.loc[i, "R1"]).replace("R1", "R1R2").split(".")[0] + "JoinDiff.joinbp.count" 
 				df = pd.read_csv(filepath, sep="\t", names=['FragPair', os.path.basename(filepath)])
 
 				if replicate==1:
@@ -281,8 +281,8 @@ def merge_counts(organization_df, counts_files_location):
 				else:
 					df_main = df_main.merge(df, how='outer', on='FragPair').fillna(0)
 		
-		df_main.iloc[:, 1:] = df_main.iloc[:, 1:].astype(int)
-		df_main.to_csv(counts_files_location + f"{project}" + "_" + f"{library}" + ".counts", sep="\t", index=False)
+			df_main.iloc[:, 1:] = df_main.iloc[:, 1:].astype(int)
+			df_main.to_csv(counts_files_location + f"{project}" + "_" + f"{library}" + ".counts", sep="\t", index=False)
 
 
 
