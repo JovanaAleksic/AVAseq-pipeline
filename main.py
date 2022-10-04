@@ -121,7 +121,7 @@ def main(fastaq_files_location):
 		for file in glob.iglob(counts_files_location + "*.count"):
 			shutil.move(file, intermediate_files_location + os.path.basename(file))
 
-	print(".counts files created -----------------------------------------------------------------")
+		print(".counts files created -----------------------------------------------------------------")
 
 
 
