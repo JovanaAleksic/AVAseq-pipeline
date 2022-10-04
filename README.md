@@ -9,5 +9,7 @@ Requirements:
 1. Python 3.7 or higher
 2. Numpy 
 3. Pandas
-4. Diamond
-
+4. R
+5. edgeR
+6. statmod
+7. diamond
