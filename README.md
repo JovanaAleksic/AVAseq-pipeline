@@ -13,3 +13,12 @@ Requirements:
 5. edgeR
 6. statmod
 7. diamond
+
+
+Docker image available: https://hub.docker.com/r/jovanaaleksic/ava-seq
+
+Run pipeline with:
+
+1. docker pull jovanaaleksic/ava-seq
+2. docker run -it --rm --name UDC -v "$PWD":/app/media -w /app/media jovanaaleksic/ava-seq python3 main.py
+
