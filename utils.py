@@ -44,6 +44,9 @@ def fastqToFasta_p(file):
 			output_file.write(">" + line[1:])
 		elif line[0] in ['A', 'C', 'T', 'G', 'N'] and (i % 4 == 1):
 			output_file.write(line)
+		else:
+			print(f"Problem with fastq {file}! Found a line in the file which is neither ID, neither sequence.\
+				The rest of the code will not work properly! Investigate fastq error.")
 	print(".fastq --> .fasta DONE")
 
 	return output_file_name
